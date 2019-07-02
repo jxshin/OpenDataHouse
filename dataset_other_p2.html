@@ -1,0 +1,939 @@
+<!--
+Copyright © 2019, empirical software engineering team from Peking Uninversity and ISCAS, All rights reserved.
+
+Written by:
+  Jiaxin Zhu
+-->
+
+<script src='js/header.js'></script>   
+
+<main role="main">
+  <section class="jumbotron">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card my-4">
+            <div class="card-header">
+                Data Types
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><input type="checkbox"> VCS(0) </li> 
+                <li class="list-group-item"><input type="checkbox"> ITS(0) </li> 
+                <li class="list-group-item"><input type="checkbox"> Mails(0) </li> 
+            </ul>   
+          </div>
+          <div class="card my-4">
+            <div class="card-header">
+                Data Sizes
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><input type="checkbox"> &lt;=500M(8) </li> 
+                <li class="list-group-item"><input type="checkbox"> &gt;500M &lt;=1G(2) </li> 
+                <li class="list-group-item"><input type="checkbox"> &gt;1G(30) </li> 
+            </ul>
+          </div>
+          <div class="card my-4">
+            <div class="card-header">
+                Popularity
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><input type="checkbox"> &lt;=100(40) </li> 
+                <li class="list-group-item"><input type="checkbox"> &gt;100 &lt;=500(0) </li> 
+                <li class="list-group-item"><input type="checkbox"> &gt;500(0) </li> 
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-9">
+          
+          <hr class="no-margin-top">
+          <div class="row">     
+            <div class="col-md-12">
+              <div class="float-right">
+                 <a class="btn btn-outline-secondary btn-sm" href="https://zenodo.org/record/758151">View</a>
+               </div>
+            </div>
+            <div class="w"></div>
+            <div class="col-md-12">
+              <h4>
+                <a>bugfiles</a>
+              </h4>
+              <p>
+                
+                <span class="dataset-author">
+                  <a>Xin Ye</a>;
+                </span>
+                
+              </p>
+              <p>
+                ReferenceStudies who have been using the data /(in any 
+form/) are required to add the following reference to their 
+report//paper:@inproceedings{Ye:2014, author = {Ye, Xin and Bunescu, 
+Razvan and Liu, Chang}, title = {Learning to Rank Relevant Files for Bug
+ Reports Using Domain Knowledge}, booktitle = {Proceedings of the 22Nd 
+ACM SIGSOFT International Symposium on Foundations of Software 
+Engineering}, series = {FSE 2014}, year = {2014}, location = {Hong Kong,
+ China}, pages = {689--699}, numpages = {11}, }About the DataOverview of
+ DataThis dataset contains bug reports, commit history, and API 
+descriptions of six open source Java projects including Eclipse Platform
+ UI, SWT, JDT, AspectJ, Birt, and Tomcat. This dataset was used to 
+evaluate a learning to rank approach that recommends relevant files for 
+bug reports.Dataset structureFile list: **AspectJ./[xlsxml/]** – The bug
+ reports and commit history of AspectJ. **Birt./[xlsxml/]** – The bug 
+reports and commit history of Birt. **Eclipse/_Platform/_UI./[xlsxml/]**
+ – The bug reports and commit history of Eclipse Platform UI. 
+**JDT./[xlsxml/]** – The bug reports and commit history of JDT. 
+**SWT./[xlsxml/]** – The bug reports and commit history of SWT. 
+**Tomcat./[xlsxml/]** – The bug reports and commit history of 
+Tomcat.Attribute Information bug\/_id– refers to the bug report id. 
+summary– refers to the bug report summary. description– refers to the 
+bug report description. report\/_time– refers to the bug report report 
+time. report\/_timestamp– refers to the bug report report timestamp. 
+status– refers to the status of the bug report. commit– refers to the 
+SHA-1 hash id for the commit that fixed the bug report. 
+commit\/_timestamp– refers to the commit timestamp. files– contains the 
+full path of every Java file that was fixed in this commit. result– 
+contains the position of every positive instance in our ranked list 
+result.How to obtain the source code AspectJ:git clone 
+git:////git.eclipse.org//gitroot//aspectj//org.aspectj.git Birt:git 
+clone https:////git.eclipse.org//r//p//birt//org.eclipse.birt Eclipse 
+Platform UI:git clone 
+https:////git.eclipse.org//r//p//platform//eclipse.platform.ui JDT:git 
+clone https:////git.eclipse.org//r//p//jdt//eclipse.jdt.ui SWT:git clone
+ https:////git.eclipse.org//r//p//platform//eclipse.platform.swt 
+Tomcat:git clone git:////git.apache.org//tomcat.gitA before-fix version 
+of the source code package needs to be checked out for each bug report. 
+Taking Eclipse Bug 420972 for example, this bug was fixed at commit 
+657bd90. To check out the before-fix version 2143203 of the source code 
+package, use the commandgit checkout 657bd90~1.Efficient indexing of the
+ codeIf bug 420972 is the first bug processed by the system, we check 
+out its before-fix version 2143203 and index all the corresponding 
+source files. To process another bug report 423588, we need to check out
+ its before-fix version 602d549 of the source code package. For 
+efficiency reasons, we do not need to index all the source files again. 
+Instead, we index only the changed files, i.e., files that were “Added”,
+ “Modified”, or “Deleted” between the two bug reports. The changed files
+ can be obtained as follows: Added:git diff --name-status 2143203 
+602d549 | grep ".java$" | grep "^A" Modified:git diff --name-status 
+2143203 602d549 | grep ".java$" | grep "^M" Deleted:git diff 
+--name-status 2143203 602d549 | grep ".java$" | grep "^D"Paper 
+abstractWhen a new bug report is received, developers usually need to 
+reproduce the bug and perform code reviews to find the cause, a process 
+that can be tedious and time consuming. A tool for ranking all the 
+source files of a project with respect to how likely they are to contain
+ the cause of the bug would enable developers to narrow down their 
+search and potentially could lead to a substantial increase in 
+productivity. This paper introduces an adaptive ranking approach that 
+leverages domain knowledge through functional decompositions of source 
+code files into methods, API descriptions of library components used in 
+the code, the bug-fixing history, and the code change history. Given a 
+bug report, the ranking score of each source file is computed as a 
+weighted combination of an array of features encoding domain knowledge, 
+where the weights are trained automatically on previously solved bug 
+reports using a learning-to-rank technique. We evaluated our system on 
+six large scale open source Java projects, using the before-fix version 
+of the project for every bug report. The experimental results show that 
+the newly introduced learning-to-rank approach significantly outperforms
+ two recent state-of-the-art methods in recommending relevant files for 
+bug reports. In particular, our method makes correct recommendations 
+within the top 10 ranked source files for over 70/% of the bug reports 
+in the Eclipse Platform and Tomcat projects.
+              </p>
+            </div>
+           </div>          
+          
+          <hr class="no-margin-top">
+          <div class="row">     
+            <div class="col-md-12">
+              <div class="float-right">
+                 <a class="btn btn-outline-secondary btn-sm" href="https://zenodo.org/record/1297982">View</a>
+               </div>
+            </div>
+            <div class="w"></div>
+            <div class="col-md-12">
+              <h4>
+                <a>Ecosystem-Level Factors Affecting the Survival of Open-Source Projects:  A Case Study of the PyPI Ecosystem - the dataset</a>
+              </h4>
+              <p>
+                
+                <span class="dataset-author">
+                  <a>Valiev, Marat</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Vasilescu, Bogdan</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Herbsleb, James</a>;
+                </span>
+                
+              </p>
+              <p>
+                Replication pack, FSE2018 submission 
+#164:------------------------------------------**Working title:** 
+Ecosystem-Level Factors Affecting the Survival of Open-Source Projects: A
+ Case Study of the PyPI Ecosystem**Note:** link to data artifacts is 
+already included in the paper. Link to the code will be included in the 
+Camera Ready version as well.Content description===================- 
+**ghd-0.1.0.zip** - the code archive. This code produces the dataset 
+files described below- **settings.py** - settings template for the code 
+archive.- **dataset/_minimal/_Jan/_2018.zip** - the minimally sufficient
+ version of the dataset. This dataset only includes stats aggregated by 
+the ecosystem /(PyPI/)- **dataset/_full/_Jan/_2018.tgz** - full version 
+of the dataset, including project-level statistics. It is ~34Gb 
+unpacked. This dataset still doesn/'t include PyPI packages themselves, 
+which take around 2TB.- **build/_model.r, helpers.r** - R files to 
+process the survival data /(`survival/_data.csv` in 
+**dataset/_minimal/_Jan/_2018.zip**, 
+`common.cache//survival/_data.pypi/_2008/_2017-12/_6.csv` in 
+**dataset/_full/_Jan/_2018.tgz**/)- **Interview protocol.pdf** - 
+approximate protocol used for semistructured interviews.- LICENSE - text
+ of GPL v3, under which this dataset is published- INSTALL.md - 
+replication guide /(~2 pages/)Replication guide=================Step 0 -
+ prerequisites----------------------- Unix-compatible OS /(Linux or OS 
+X/)- Python interpreter /(2.7 was used; Python 3 compatibility is highly
+ likely/)- R 3.4 or higher /(3.4.4 was used, 3.2 is known to be 
+incompatible/)Depending on detalization level /(see Step 2 for more 
+details/):- up to 2Tb of disk space /(see Step 2 detalization levels/)- 
+at least 16Gb of RAM /(64 preferable/)- few hours to few month of 
+processing timeStep 1 - software----------------- unpack 
+**ghd-0.1.0.zip**, or clone from gitlab: git clone 
+https:////gitlab.com//user2589//ghd.git git checkout 0.1.0 `cd` into the
+ extracted folder. All commands below assume it as a current directory. -
+ copy `settings.py` into the extracted folder. Edit the file: * set 
+`DATASET/_PATH` to some newly created folder path * add at least one 
+GitHub API token to `SCRAPER/_GITHUB/_API/_TOKENS` - install docker. For
+ Ubuntu Linux, the command is `sudo apt-get install docker-compose`- 
+install libarchive and headers: `sudo apt-get install libarchive-dev`- 
+/(optional/) to replicate on NPM, install yajl: `sudo apt-get install 
+yajl-tools` Without this dependency, you might get an error on the next 
+step, but it/'s safe to ignore.- install Python libraries: `pip install 
+--user -r requirements.txt` . - disable all APIs except GitHub 
+/(Bitbucket and Gitlab support were not yet implemented when this study 
+was in progress/): edit `scraper//init.py`, comment out everything 
+except GitHub support in `PROVIDERS`.Step 2 - obtaining the 
+dataset-----------------------------The ultimate goal of this step is to
+ get output of the Python function `common.utils.survival/_data/(/)` and
+ save it into a CSV file: # copy and paste into a Python console from 
+common import utils survival/_data = utils.survival/_data/(/'pypi/', 
+/'2008/', smoothing=6/) 
+survival/_data.to/_csv/(/'survival/_data.csv/'/)Since full replication 
+will take several months, here are some ways to speedupthe 
+process:####Option 2.a, difficulty level: easiestJust use the 
+precomputed data. Step 1 is not necessary under this scenario.- extract 
+**dataset/_minimal/_Jan/_2018.zip**- get `survival/_data.csv`, go to the
+ next step####Option 2.b, difficulty level: easyUse precomputed 
+longitudinal feature values to build the final table.The whole process 
+will take 15..30 minutes.- create a folder 
+`/&lt;DATASET/_PATH/&gt;//common.cache`, where `/&lt;DATASET/_PATH/&gt;`
+ is the value of the variable `DATASET/_PATH` in `settings.py`- extract 
+**dataset/_minimal/_Jan/_2018** to the newly created folder- rename 
+files: mv backporting.csv monthly/_data.pypi/_backporting.csv mv 
+cc/_degree.csv monthly/_data.pypi/_cc/_degree.csv mv commercial.csv 
+monthly/_data.pypi/_commercial.csv mv commits.csv 
+monthly/_data.pypi/_commits.csv mv contributors.csv 
+monthly/_data.pypi/_contributors.csv mv dc/_katz.csv 
+monthly/_data.pypi/_dc/_katz.csv mv downstreams.csv 
+monthly/_data.pypi/_downstreams.csv mv d/_upstreams.csv 
+monthly/_data.pypi/_d/_upstreams.csv mv github/_user/_info.csv 
+user/_info.pypi.csv mv issues.csv monthly/_data.pypi/_issues.csv mv 
+non/_dev/_issues.csv monthly/_data.pypi/_non/_dev/_issues.csv mv 
+non/_dev/_submitters.csv monthly/_data.pypi/_non/_dev/_submitters mv 
+package/_urls.csv package/_urls.pypi.csv mv q90.csv 
+monthly/_data.pypi/_q90.csv # raw/_dependencies.csv is not required # 
+raw/_packages/_info.csv is not required # Feel free to read README.md 
+for more details about the data mv submitters.csv 
+monthly/_data.pypi/_submitters.csv # In this scenario we/'ll generate a 
+new survival/_data.csv mv university.csv 
+monthly/_data.pypi/_university.csv mv upstreams.csv 
+monthly/_data.pypi/_upstreams.csv- edit `common//decorators.py`, set 
+`DEFAULT/_EXPIRY` to some higher value, e.g. `DEFAULT/_EXPIRY = 
+float/(/'inf/'/) # cache never expires`Then, use the Python code above 
+to obtain `survival/_data.csv`.####Option 2.c, difficulty level: 
+mediumUse predownloaded raw data to build longitudinal feature values, 
+and then the dataset. Despite most of the data is cached, some functions
+ willpull up updates which might take anywhere from days to couple weeks
+ to run.- Download **dataset/_full/_Jan/_2018.tgz** from 
+http:////k.soberi.us//dataset/_full/_Jan/_2018.tgz .This file is not 
+included in this archive because of its size /(5.4Gb compressed, 34Gb 
+unpacked/).- edit `common//decorators.py`, set `DEFAULT/_EXPIRY` to some
+ higher value, e.g. `DEFAULT/_EXPIRY = float/(/'inf/'/) # cache never 
+expires`- extract the content of this archive into 
+`/&lt;DATASET/_PATH/&gt;`.- clean up 
+`/&lt;DATASET/_PATH/&gt;//common.cache` /(otherwise you/'ll get Step 
+2.a. You can reproduce Step 2.b by deleting only 
+`survival/_data.pypi/_2008/_2017-12/_6.csv`/)Run the Python code above 
+to obtain `survival/_data.csv`.####Option 2.d, difficulty level: 
+hardBuild the dataset from scratch. Although most of the processing 
+isparallelized, it will take at least couple months on a 
+reasonablypowerful server /(32 cores, 512G of RAM, 2Tb+ of HDD space in 
+our setup/).- ensure the `/&lt;DATASET/_PATH/&gt;` is empty- add more 
+GitHub tokens /(borrow from your coworkers/) to `settings.py`.Run the 
+Python code above to obtain `survival/_data.csv`.Step 3 - run the 
+regression---------------------------install R libraries: 
+install.packages/(c/(/"htmlTable/", /"OIsurv/", /"survival/", /"car/", 
+/"survminer/", /"ggplot2/", /"sqldf/", /"pscl/", /"texreg/", 
+/"xtable/"/)/)Use `build/_model.r` /(e.g. in RStudio/) and produced 
+`survival/_data.csv` to build the regressions used in the paper. This 
+process takes at least 16Gb of RAM and takes few hours to run due to the
+ gigantic size of the dataset.
+              </p>
+            </div>
+           </div>          
+          
+          <hr class="no-margin-top">
+          <div class="row">     
+            <div class="col-md-12">
+              <div class="float-right">
+                 <a class="btn btn-outline-secondary btn-sm" href="https://zenodo.org/record/631041">View</a>
+               </div>
+            </div>
+            <div class="w"></div>
+            <div class="col-md-12">
+              <h4>
+                <a>2010 ISMRM Recon Challenge, Stockholm, Sweden</a>
+              </h4>
+              <p>
+                
+                <span class="dataset-author">
+                  <a>Pipe, James</a>;
+                </span>
+                
+              </p>
+              <p>
+                This data was presented at the ISMRM-ESMRMB Joint Annual
+ Meeting in Stockholm, Sweden, 2010. /&nbsp;It can be found in the 
+program under:PLENARY SESSIONRoom AI/&nbsp;The Eye of the Beholder: An 
+Image Reconstruction Challenge/&nbsp;Organizers: /&nbsp;Margaret A. 
+Hall-Craggs, M.D., Douglas C. Noll, Ph.D., and James G. Pipe, 
+Ph.D./&nbsp; 08:15 If I Am So Good at This, Why Do I Miss So Much? 
+Jeremy M. Wolfe, Ph.D./&nbsp; 08:40 Reconstruction Challenge: So Many 
+Algorithms, So Few Data/&nbsp; Award presentations, panel 
+discussion---Please read the instructions for each data set before 
+downloading./&nbsp; The first three data sets are from the 2010 ISMRM 
+Recon Challenge./&nbsp; The available/&nbsp;poster 
+/(2010RCPoster.pdf/)/&nbsp;gives examples of the entries./&nbsp; 
+Registrants to the 2010 ISMRM Annual Meeting can hear radiologist/’s 
+comments and see the results by/&nbsp;visiting here 
+/(http:////www.ismrm.org//PRES/_W/_A1/_0840///).1./&nbsp;/&nbsp;Need for
+ Speed./&nbsp; Data were simulated using collected projection X-ray of 
+an arterial bolus injection in a patient with an AVM./&nbsp; X-ray data 
+were collected 3 frames per second, for a total of 10 seconds /(31 
+collected frames/) which span wash-in to wash-out./&nbsp; These were 
+linearly interpolated in time between frames to create a total of 200 
+temporal images, each with 512x512 resolution./&nbsp; B1-maps /(provided
+ with data/) derived from an axial slice through a water phantom using 
+an 8-channel head coil were superimposed on the image to create 8 
+/“coil/” images./&nbsp; Independent noise was added to each 
+channel./&nbsp; The data were synthesized over 200 trajectories, each 
+with 2000 points./&nbsp; Data for each trajectory are synthesized from 
+one temporal frame of the time 
+series./&nbsp;/&nbsp;NFS/_materials.zip:/&nbsp;descriptions of 
+trajectories /(the pdf files/), read//write code for C and Matlab, and 
+B1/&nbsp;maps./&nbsp;NFS/_truth.dat: for the NFS truth data set, which 
+has no header, is floating point /(4 byte/) real data, and arranged as a
+ 3D array of 512x512x37.You may then choose from any of the following 
+sets:A. 
+/&nbsp;NFS/_NZWA/_09AUG06.zip:/&nbsp;a/&nbsp;Spiral/&nbsp;trajectory 
+coordinates and data. /(trajectory designed by Nick 
+Zwart,/&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp; Barrow Neurological 
+Institute/)B. 
+/&nbsp;NFS/_ASAM/_09AUG04.zip:/&nbsp;a/&nbsp;PR/&nbsp;trajectory 
+coordinates and data. /(trajectory designed by Alexey 
+Samsonov,/&nbsp;University of Wisconsin/)2./&nbsp;/&nbsp;Double 
+Vision./&nbsp; Data originate from 12 axial images in the abdomen 
+/(respiratory gated T2 FSE with Fat Sat/) collected using a torso 
+phase-array coil, collected at 320x320 matrix /(40cm FOV/)./&nbsp; Field
+ maps /(breatheld, end-exhilation, with Fat Sat/) were collected using 
+gradient echo images at TE = 3 and 5, with a 96x96 collected 
+matrix./&nbsp; Synthesized data were corrupted by off-resonance 
+phase./&nbsp; Data from each of the 8 coils were generated./&nbsp; B0 
+and B1 maps are provided with the data. /(B0 maps are in units of 
+Hz/)./&nbsp; The data were synthesized over 8 trajectories, each with 
+20,000 points./&nbsp; The dwell time was 1usec, e.g. the time for each 
+acquisition was 
+20msec./&nbsp;/&nbsp;DV/_materials.zip:/&nbsp;descriptions of 
+trajectories /(the pdf files/), read//write code for C and Matlab, 
+B0/&nbsp;maps, and B1/&nbsp;maps.DV/_truth.dat:/&nbsp;the DV truth data 
+set, which has no header, is floating point /(4 byte/) real data, and 
+arranged as a 3D array of 320x320x12.You may choose from any one of the 
+following 
+sets:A./&nbsp;/&nbsp;DV/_CMEY/_09JUL06.zip:/&nbsp;a/&nbsp;Spiral/&nbsp;trajectory
+ coordinates and data. /(trajectory designed by Craig Meyer, University 
+of 
+Virginia/)B./&nbsp;/&nbsp;DV/_JPIP/_09SEP08.zip:/&nbsp;an/&nbsp;EPI/&nbsp;trajectory
+ coordinates and data. /(trajectory designed by Jim Pipe, Barrow 
+Neurological Institute/)3./&nbsp;/&nbsp;Piece of the Puzzle./&nbsp; Data
+ are from axially collected 3D unspoiled Gradient-Echo images of the 
+knee, 320/(X/) x 320/(Y/) x 220/(Z/), with 0.5mm resolution in each 
+direction /(FOV = 160mm x 160mm x 110mm/)./&nbsp; Data are from an 
+8-channel phased-array, with coils in the x-y plane, i.e. very little 
+coil orthogonality in Z. Contestants will get separate data for each 
+coil./&nbsp; Independent noise was added to each channel./&nbsp; The 
+data were synthesized over 4,000 trajectories, each with 2,000 points, 
+which results in total undersampling of rough R=5, depending on the 
+trajectory set. /&nbsp;POP/_materials.zip:/&nbsp;to get descriptions of 
+trajectories /(the pdf files/), read//write code for C and Matlab, and 
+B1/&nbsp;maps.POP/_truth.dat:/&nbsp;for the POP truth data set, which 
+has no header, is floating point /(4 byte/) real data, and arranged as a
+ 3D array of 320x320x220.You may choose from any one of the following 
+sets:A./&nbsp;/&nbsp;POP/_MLUS/_09AUG03.zip:/&nbsp;a/&nbsp;Random 
+-/&nbsp;Poisson Disk/&nbsp;trajectory coordinates and data./&nbsp; 
+/&nbsp; /&nbsp; 
+/&nbsp;/(trajectory/&nbsp;designed/&nbsp;Miki/&nbsp;Lustig,/&nbsp;Stanford
+ 
+University/)B./&nbsp;/&nbsp;POP/_ADEV/_09AUG07.zip:/&nbsp;a/&nbsp;Spiral
+ Projection /(low resolution/)/&nbsp;trajectory coordinates and 
+data./&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp; /(trajectory designed 
+Ajit Devaraj, Barrow Neurological 
+Institute/)C./&nbsp;/&nbsp;POP/_ADEV/_09AUG10.zip:/&nbsp;a/&nbsp;Spiral 
+Projection /(high resolution/)/&nbsp;trajectory coordinates and 
+data./&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp; /(trajectory designed 
+Ajit Devaraj, Barrow Neurological 
+Institute/)D./&nbsp;/&nbsp;POP/_BHAR/_09AUG06.zip:/&nbsp;a/&nbsp;Stack-of-Spirals/&nbsp;trajectory
+ coordinates and data./&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp; 
+/(trajectory designed Brian Hargreaves, Stanford 
+University/)E./&nbsp;/&nbsp;POP/_HUWU/_09SEP12.zip:/&nbsp;a/&nbsp;VIPR/&nbsp;trajectory
+ coordinates and data./&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp; 
+/(trajectory designed Huimin Wu, University of Wisconsin/)Originally 
+posted on:/&nbsp;http:////www.ismrm.org//mri/_unbound//simulated.htm
+              </p>
+            </div>
+           </div>          
+          
+          <hr class="no-margin-top">
+          <div class="row">     
+            <div class="col-md-12">
+              <div class="float-right">
+                 <a class="btn btn-outline-secondary btn-sm" href="https://zenodo.org/record/1297924">View</a>
+               </div>
+            </div>
+            <div class="w"></div>
+            <div class="col-md-12">
+              <h4>
+                <a>Ecosystem-Level Determinants of Sustained Activity in Open-Source Projects: A Case Study of the PyPI Ecosystem</a>
+              </h4>
+              <p>
+                
+                <span class="dataset-author">
+                  <a>Valiev, Marat</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Vasilescu, Bogdan</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Herbsleb, James</a>;
+                </span>
+                
+              </p>
+              <p>
+                Replication pack, FSE2018 submission 
+#164:------------------------------------------**Working title:** 
+Ecosystem-Level Factors Affecting the Survival of Open-Source Projects: A
+ Case Study of the PyPI Ecosystem**Note:** link to data artifacts is 
+already included in the paper. Link to the code will be included in the 
+Camera Ready version as well.Content description===================- 
+**ghd-0.1.0.zip** - the code archive. This code produces the dataset 
+files described below- **settings.py** - settings template for the code 
+archive.- **dataset/_minimal/_Jan/_2018.zip** - the minimally sufficient
+ version of the dataset. This dataset only includes stats aggregated by 
+the ecosystem /(PyPI/)- **dataset/_full/_Jan/_2018.tgz** - full version 
+of the dataset, including project-level statistics. It is ~34Gb 
+unpacked. This dataset still doesn/'t include PyPI packages themselves, 
+which take around 2TB.- **build/_model.r, helpers.r** - R files to 
+process the survival data /(`survival/_data.csv` in 
+**dataset/_minimal/_Jan/_2018.zip**, 
+`common.cache//survival/_data.pypi/_2008/_2017-12/_6.csv` in 
+**dataset/_full/_Jan/_2018.tgz**/)- **Interview protocol.pdf** - 
+approximate protocol used for semistructured interviews.- LICENSE - text
+ of GPL v3, under which this dataset is published- INSTALL.md - 
+replication guide /(~2 pages/)Replication guide=================Step 0 -
+ prerequisites----------------------- Unix-compatible OS /(Linux or OS 
+X/)- Python interpreter /(2.7 was used; Python 3 compatibility is highly
+ likely/)- R 3.4 or higher /(3.4.4 was used, 3.2 is known to be 
+incompatible/)Depending on detalization level /(see Step 2 for more 
+details/):- up to 2Tb of disk space /(see Step 2 detalization levels/)- 
+at least 16Gb of RAM /(64 preferable/)- few hours to few month of 
+processing timeStep 1 - software----------------- unpack 
+**ghd-0.1.0.zip**, or clone from gitlab: git clone 
+https:////gitlab.com//user2589//ghd.git git checkout 0.1.0 `cd` into the
+ extracted folder. All commands below assume it as a current directory. -
+ copy `settings.py` into the extracted folder. Edit the file: * set 
+`DATASET/_PATH` to some newly created folder path * add at least one 
+GitHub API token to `SCRAPER/_GITHUB/_API/_TOKENS` - install docker. For
+ Ubuntu Linux, the command is `sudo apt-get install docker-compose`- 
+install libarchive and headers: `sudo apt-get install libarchive-dev`- 
+/(optional/) to replicate on NPM, install yajl: `sudo apt-get install 
+yajl-tools` Without this dependency, you might get an error on the next 
+step, but it/'s safe to ignore.- install Python libraries: `pip install 
+--user -r requirements.txt` . - disable all APIs except GitHub 
+/(Bitbucket and Gitlab support were not yet implemented when this study 
+was in progress/): edit `scraper//init.py`, comment out everything 
+except GitHub support in `PROVIDERS`.Step 2 - obtaining the 
+dataset-----------------------------The ultimate goal of this step is to
+ get output of the Python function `common.utils.survival/_data/(/)` and
+ save it into a CSV file: # copy and paste into a Python console from 
+common import utils survival/_data = utils.survival/_data/(/'pypi/', 
+/'2008/', smoothing=6/) 
+survival/_data.to/_csv/(/'survival/_data.csv/'/)Since full replication 
+will take several months, here are some ways to speedupthe 
+process:####Option 2.a, difficulty level: easiestJust use the 
+precomputed data. Step 1 is not necessary under this scenario.- extract 
+**dataset/_minimal/_Jan/_2018.zip**- get `survival/_data.csv`, go to the
+ next step####Option 2.b, difficulty level: easyUse precomputed 
+longitudinal feature values to build the final table.The whole process 
+will take 15..30 minutes.- create a folder 
+`/&lt;DATASET/_PATH/&gt;//common.cache`, where `/&lt;DATASET/_PATH/&gt;`
+ is the value of the variable `DATASET/_PATH` in `settings.py`- extract 
+**dataset/_minimal/_Jan/_2018** to the newly created folder- rename 
+files: mv backporting.csv monthly/_data.pypi/_backporting.csv mv 
+cc/_degree.csv monthly/_data.pypi/_cc/_degree.csv mv commercial.csv 
+monthly/_data.pypi/_commercial.csv mv commits.csv 
+monthly/_data.pypi/_commits.csv mv contributors.csv 
+monthly/_data.pypi/_contributors.csv mv dc/_katz.csv 
+monthly/_data.pypi/_dc/_katz.csv mv downstreams.csv 
+monthly/_data.pypi/_downstreams.csv mv d/_upstreams.csv 
+monthly/_data.pypi/_d/_upstreams.csv mv github/_user/_info.csv 
+user/_info.pypi.csv mv issues.csv monthly/_data.pypi/_issues.csv mv 
+non/_dev/_issues.csv monthly/_data.pypi/_non/_dev/_issues.csv mv 
+non/_dev/_submitters.csv monthly/_data.pypi/_non/_dev/_submitters mv 
+package/_urls.csv package/_urls.pypi.csv mv q90.csv 
+monthly/_data.pypi/_q90.csv # raw/_dependencies.csv is not required # 
+raw/_packages/_info.csv is not required # Feel free to read README.md 
+for more details about the data mv submitters.csv 
+monthly/_data.pypi/_submitters.csv # In this scenario we/'ll generate a 
+new survival/_data.csv mv university.csv 
+monthly/_data.pypi/_university.csv mv upstreams.csv 
+monthly/_data.pypi/_upstreams.csv- edit `common//decorators.py`, set 
+`DEFAULT/_EXPIRY` to some higher value, e.g. `DEFAULT/_EXPIRY = 
+float/(/'inf/'/) # cache never expires`Then, use the Python code above 
+to obtain `survival/_data.csv`.####Option 2.c, difficulty level: 
+mediumUse pre-downloaded raw data to build longitudinal feature values, 
+and then the dataset. Despite most of the data is cached, some functions
+ willpull up updates which might take anywhere from days to couple weeks
+ to run.- Download **dataset/_full/_Jan/_2018.tgz** /(5.4Gb compressed, 
+34Gb unpacked/).- edit `common//decorators.py`, set `DEFAULT/_EXPIRY` to
+ some higher value, e.g. `DEFAULT/_EXPIRY = float/(/'inf/'/) # cache 
+never expires`- extract the content of this archive into 
+`/&lt;DATASET/_PATH/&gt;`.- clean up 
+`/&lt;DATASET/_PATH/&gt;//common.cache` /(otherwise you/'ll get Step 
+2.a. You can reproduce Step 2.b by deleting only 
+`survival/_data.pypi/_2008/_2017-12/_6.csv`/)Run the Python code above 
+to obtain `survival/_data.csv`.####Option 2.d, difficulty level: 
+hardBuild the dataset from scratch. Although most of the processing 
+isparallelized, it will take at least couple months on a 
+reasonablypowerful server /(32 cores, 512G of RAM, 2Tb+ of HDD space in 
+our setup/).- ensure the `/&lt;DATASET/_PATH/&gt;` is empty- add more 
+GitHub tokens /(borrow from your coworkers/) to `settings.py`.Run the 
+Python code above to obtain `survival/_data.csv`.Step 3 - run the 
+regression---------------------------install R libraries: 
+install.packages/(c/(/"htmlTable/", /"OIsurv/", /"survival/", /"car/", 
+/"survminer/", /"ggplot2/", /"sqldf/", /"pscl/", /"texreg/", 
+/"xtable/"/)/)Use `build/_model.r` /(e.g. in RStudio/) and produced 
+`survival/_data.csv` to build the regressions used in the paper. This 
+process takes at least 16Gb of RAM and takes few hours to run due to the
+ gigantic size of the dataset.
+              </p>
+            </div>
+           </div>          
+          
+          <hr class="no-margin-top">
+          <div class="row">     
+            <div class="col-md-12">
+              <div class="float-right">
+                 <a class="btn btn-outline-secondary btn-sm" href="https://zenodo.org/record/1112341">View</a>
+               </div>
+            </div>
+            <div class="w"></div>
+            <div class="col-md-12">
+              <h4>
+                <a>Database of weeds in cultivation fields of France and UK, with ecological and biogeographical information</a>
+              </h4>
+              <p>
+                
+                <span class="dataset-author">
+                  <a>François Munoz</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Guillaume Fried</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Laura Armengot</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Bérenger Bourgeois</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Vincent Bretagnolle</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Joël Chadoeuf</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Lucie Mahaut</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Christine Plumejeaud</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Jonathan Storkey</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Cyrille Violle</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Sabrina Gaba</a>;
+                </span>
+                
+              </p>
+              <p>
+                The database includes a list of 1577 weed plant taxa 
+found in cultivated fields of France and UK, along with basic ecological
+ and biogeographical information.The database is a CSV file in which the
+ columns are separated with comma, and the decimal sign is /"./".It can 
+be imported in R with the command /"tax.discoweed /&lt;- 
+read.csv/(/"tax.discoweed/_18Dec2017/_zenodo.csv/", header=T, 
+sep=/",/",/&nbsp; dec=/"./", stringsAsFactors = F/)/"Taxonomic 
+information is based on TaxRef v10 /(Gargominy et al. 2016/),- 
+/'taxref10.CD/_REF/' = code of the accepted name of the taxon in 
+TaxRef,- /'binome.discoweed/' = corresponding latine name,- /'family/' =
+ family name /(following APG III/),- /'taxo/' = taxonomic rank of the 
+taxon, either /'binome/' /(species level/) or /'infra/' /(infraspecific 
+level/),- /'binome.discoweed.noinfra/' = latine name of the superior 
+taxon at species level /(different from /'binome.discoweed/' for 
+infrataxa/),- /'taxref10.CD/_REF.noinfra/' = code of the accepted name 
+of the superior taxon at species level.The presence of each taxon in one
+ or several of the following data sources is reported:- Species list 
+from a reference flora /(observations in cultivated fields over the long
+ term, without sampling protocol/),* /'jauzein/' =/&nbsp; national and 
+comprehensive flora in France /(Jauzein 1995/),- Species lists from 
+plot-based inventories in cultivated fields,* /'za/' = regional survey 
+in /'Zone Atelier Plaine /&amp; Val de S/èvre/' in SW France /(Gaba et 
+al. 2010/),* /'biovigilance/' = national survey of cultivated fields in 
+France /(Biovigilance, Fried et al. 2008/),* /'fse/' = Farm Scale 
+Evaluations in England and Scotland, UK /(Perry, Rothery, Clark et al., 
+2003/),* /'farmbio/' = Farm4Bio survey, farms in south east and south 
+west of England, UK /(Holland et al., 2013/)- Reference list of segetal 
+species /(species specialist of arable fields/),* /'cambacedes/' = 
+reference list in France /(Cambacedes et al. 2002/)Life form information
+ is extracted from Julve /(2014/) and provided in the column 
+/'lifeform/'.The classification follows a simplified Raunkiaer 
+classification /(therophyte, hemicryptophyte, geophyte, 
+phanerophyte-chamaephyte and liana/). Regularly biannual plants are 
+included in hemicryptophytes, while plants that can be both annual and 
+biannual are assigned to therophytes.Biogeographic zones are also 
+extracted from Julve /(2014/) and provided in the column /'biogeo/'.The 
+main categories are /'atlantic/', /'circumboreal/', /'cosmopolitan, 
+/'Eurasian/', /'European/', /'holarctic/', /'introduced/', 
+/'Mediterranean/', /'orophyte/' and /'subtropical/'.In some cases, a 
+precision is included within brackets after the category name. For 
+instance, /'introduced/(North America/)/' indicates that the taxon is 
+introduced from North America.In addition, some taxa are local endemics 
+/(/'Aquitanian/', /'Catalan/', /'Corsican/', /'corso-sard/', /'ligure/',
+ /'Provencal/'/).A single taxon is classified /'arctic-alpine/'.Red list
+ status of weed taxa is derived for France and UK:- /'red.FR/' is the 
+status following the assessment of the French National Museum of Natural
+ History /(2012/),- /'red.UK/' is based on the Red List of vascular 
+plants of Cheffings and Farrell /(2005/), last updated in 2006.The 
+categories are coded following the IUCN nomenclature.A habitat index is 
+provided in column /'module/', derived from a network-based analysis of 
+plant communities in open herbaceous vegetation in France /(Divgrass 
+database, Violle et al. 2015, Carboni et al. 2016/).The main habitat 
+categories of weeds are coded following the Divgrass classification,- 1 =
+ Dry calcareous grasslands- 3 = Mesic grasslands- 5 = Ruderal and 
+trampled grasslands- 9 = Mesophilous and nitrophilous fringes 
+/(hedgerows, forest edges.../)Taxa belonging to other habitats in 
+Divgrass are coded 99, while the taxa absent from Divgrass have a /'NA/'
+ value.Two indexes of ecological specialization are provided based on 
+the frequency of weed taxa in different habitats of the Divgrass 
+database.The indexes are network-based metrics proposed by Guimera and 
+Amaral /(2005/),- c = coefficient of participation, i.e., the propensity
+ of taxa to be present in diverse habitats, from 0 /(specialist, present
+ in a single habitat/) to 1 /(generalist equally represented in all 
+habitats/),- z = within-module degree, i.e., a standardized measure of 
+the frequency of a taxon in its habitat; it is negatve when the taxon is
+ less frequent than average in this habitat, and positive otherwise; the
+ index scales as a number of standard deviations from the mean.
+              </p>
+            </div>
+           </div>          
+          
+          <hr class="no-margin-top">
+          <div class="row">     
+            <div class="col-md-12">
+              <div class="float-right">
+                 <a class="btn btn-outline-secondary btn-sm" href="https://zenodo.org/record/591638">View</a>
+               </div>
+            </div>
+            <div class="w"></div>
+            <div class="col-md-12">
+              <h4>
+                <a>Pull request contributors analysis dataset</a>
+              </h4>
+              <p>
+                
+                <span class="dataset-author">
+                  <a>Georgios Gousios</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Margaret-Anne Storey</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Alberto Bacchelli</a>;
+                </span>
+                
+              </p>
+              <p>
+                Dataset for the paper: G. Gousios, M.-A. Storey, and A. 
+Bacchelli, /“Work Practices and Challenges in Pull-Based Development: 
+The Contributor/’s Perspective,/” in Proceedings of the 38th 
+International Conference on Software Engineering, 2016.
+              </p>
+            </div>
+           </div>          
+          
+          <hr class="no-margin-top">
+          <div class="row">     
+            <div class="col-md-12">
+              <div class="float-right">
+                 <a class="btn btn-outline-secondary btn-sm" href="https://zenodo.org/record/2566031">View</a>
+               </div>
+            </div>
+            <div class="w"></div>
+            <div class="col-md-12">
+              <h4>
+                <a>Replication Package for "Automated Reporting of Anti-Patterns and Decay in Continuous Integration"</a>
+              </h4>
+              <p>
+                
+                <span class="dataset-author">
+                  <a>Carmine Vassallo</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Sebastian Proksch</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Harald C. Gall</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Massimiliano Di Penta</a>;
+                </span>
+                
+              </p>
+              <p>
+                This is the replication package for the paper 
+/"Automated Reporting of Anti-Patterns and Decay in Continuous 
+Integration/" accepted for publication at ICSE 2019 /(Technical 
+Track/).We include all the artifacts necessary to replicate the results 
+obtained in our paper. Specifically, we provide /(i/) all the scripts 
+used to conduct our statistical tests and to process the data obtained 
+from our surveys, /(ii/) the queries used to perform the project 
+selection, /(iii/) and a runnable version of our CI anti-patterns 
+detection tool along with the external source code used to quantify the 
+presence of CI anti-patterns in our dataset.Furthermore, we provide raw 
+and processed data from our surveys and data /(build logs and 
+repositories/) that can be used as input to our detection pipeline. We 
+also include a Docker container image with a working environment 
+containing the artifacts.Preprint of corresponding paper is 
+available/&nbsp;here.
+              </p>
+            </div>
+           </div>          
+          
+          <hr class="no-margin-top">
+          <div class="row">     
+            <div class="col-md-12">
+              <div class="float-right">
+                 <a class="btn btn-outline-secondary btn-sm" href="https://zenodo.org/record/2550767">View</a>
+               </div>
+            </div>
+            <div class="w"></div>
+            <div class="col-md-12">
+              <h4>
+                <a>Replication Package: Developer Reading Behavior while Summarizing Java Methods: Size and Context Matters</a>
+              </h4>
+              <p>
+                
+                <span class="dataset-author">
+                  <a>Sharif, Bonita</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Abid, Nahla</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Maletic, Jonathan</a>;
+                </span>
+                
+              </p>
+              <p>
+                A replication package for the study presented in the 
+ICSE 2019 paper titled /"Developer Reading Behavior while Summarizing 
+Java Methods: Size and Context Matters/" by Abid, Sharif, Dragan, 
+Alrasheed, and Maletic
+              </p>
+            </div>
+           </div>          
+          
+          <hr class="no-margin-top">
+          <div class="row">     
+            <div class="col-md-12">
+              <div class="float-right">
+                 <a class="btn btn-outline-secondary btn-sm" href="https://zenodo.org/record/2578295">View</a>
+               </div>
+            </div>
+            <div class="w"></div>
+            <div class="col-md-12">
+              <h4>
+                <a>Subject source code for Safe Automated Refactoring for Intelligent Parallelization of Java 8 Streams</a>
+              </h4>
+              <p>
+                
+                <span class="dataset-author">
+                  <a>Raffi Khatchadourian</a>;
+                </span>
+                
+              </p>
+              <p>
+                The set of open source Java projects packaged as Eclipse
+ projects used for assessing our refactoring. Please refer to the 
+included README.md file for building instructions and the 
+LICENSE.md/&nbsp;file for licensing information./&nbsp;
+              </p>
+            </div>
+           </div>          
+          
+          <hr class="no-margin-top">
+          <div class="row">     
+            <div class="col-md-12">
+              <div class="float-right">
+                 <a class="btn btn-outline-secondary btn-sm" href="https://zenodo.org/record/2550682">View</a>
+               </div>
+            </div>
+            <div class="w"></div>
+            <div class="col-md-12">
+              <h4>
+                <a>Research Artifact: 9.6 Million Links in Source Code Comments</a>
+              </h4>
+              <p>
+                
+                <span class="dataset-author">
+                  <a>Hideaki Hata</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Christoph Treude</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Raula Gaikovina Kula</a>;
+                </span>
+                
+                <span class="dataset-author">
+                  <a>Takashi Ishio</a>;
+                </span>
+                
+              </p>
+              <p>
+                This is a research artifact for the ICSE/'19 
+paper/&nbsp;9.6 Million Links in Source Code Comments: Purpose, 
+Evolution, and Decay. This artifact is a data repository including all 
+9,654,702 links associated with the information of languages and comment
+ location /(GitHub links including account names, repository names, 
+commit hashes, file paths, and line numbers/). The purpose of this 
+artifact is enabling researchers to replicate our mixed-methods 
+quantitative results of the paper, and to reuse our around 9.6 million 
+links in source code comments for further software engineering research.
+              </p>
+            </div>
+           </div>          
+          
+          
+          <ul class="pagination justify-content-center"> 
+          
+          
+          
+          <li class="page-item">
+          
+          <a class="page-link" href="dataset_other_p1.html">
+              Previous
+          </a>
+          </li>
+          
+          
+          
+          
+          <li class="page-item">
+          
+          <a class="page-link" href="dataset_other_p1.html">
+              1
+          </a>
+          </li>
+          
+          
+          
+          
+          <li class="page-item active">
+          
+          <a class="page-link" href="dataset_other_p2.html">
+              2
+          </a>
+          </li>
+          
+          
+          
+          
+          <li class="page-item">
+          
+          <a class="page-link" href="dataset_other_p3.html">
+              3
+          </a>
+          </li>
+          
+          
+          
+          
+          <li class="page-item">
+          
+          <a class="page-link" href="dataset_other_p4.html">
+              4
+          </a>
+          </li>
+          
+          
+          
+          
+          <li class="page-item">
+          
+          <a class="page-link" href="dataset_other_p3.html">
+              Next
+          </a>
+          </li>
+          
+          
+        <ul>
+        </ul></ul></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src='js/footer.js'></script>
