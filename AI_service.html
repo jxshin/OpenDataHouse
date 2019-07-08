@@ -1,0 +1,161 @@
+<!--
+Copyright © 2019, empirical software engineering team from Peking Uninversity and ISCAS, All rights reserved.
+
+Written by:
+  Jiaxin Zhu
+-->
+
+<script src='js/header.js'></script>
+    <main role="main">
+
+      <section class="jumbotron text-center">
+        <div class="container" style="max-width:800px">
+          <h1 class="jumbotron-heading" style="margin-bottom:30px">AI Software Classification</h1>
+          <p class="lead text-muted" style="font-size: 19px; text-align: left; margin-top:50px">
+          Motivation: AI, especially deep learning, is very popular in research area and job market. Many researches and studies devote to developing new
+          neural network architectures and to making AI application development easier. However, there is little knowledge about
+          the whole AI application world, for example: What kind of AI applications do people build? Here, we attempt to reveal the
+          structure of AI application world.<br /> <br />
+          Aim: We want to set up reasonable categories manually. Then, we want to develop automatic methods (supervised or unsupervised)
+          to classify all AI projects into appropriate categories. If possible, we also want to assign a date (year, for example)
+          to each AI project to discover the trend of AI application domains.<br /> <br />
+          First exploration: We first make some explorations on tensorflow projects on WoC, which is an infrastructure for mining the universe
+          of open source VCS data. <br />
+          We first filter out all python files on WoC that contain word 'tensorflow' which a tensorflow project must contain. Then, by utilizing 
+          the blob-to-commit map and commit-to-project map provided by WoC, we recognize 231,867 tensorflow projects. Beacause finding all 
+          tensorflow commits and tensorflow projects takes a long time, we first randomly select 100 tensorflow blobs, find all projects that 
+          contain them and get 1,291 projects. We then manually check these projects and classify them. We exclude those projects that are not on 
+          github (for the convenience to access their homepage) and are forked from other projects (by github label). Finally, we get 331 projetcs.
+          So, there are many forks in the dataset and we should exclude them in the later research. <br />
+          We then manually check the 331 projects and double check our results. And we first classify them into 3 big categories. They are cloned 
+          projects, customize projects and self-developed projects. Cloned projects just like fork, but they are not labelled as fork. Customize 
+          projects modify slightly other projects. Self-developed projects are totally developed by the user.<br />
+          <img class="img-responsive center-block" src="img/rough_category.png" width="80%"/>
+          <br />
+          Although we have excluded forked projects, there are also many cloned
+          projects. Concretely, there are 136 projects that are cloned from tensorflow main repository, 4 projects that are cloned from edward repository, 
+          a probabilistic programming language, 2 projects that are cloned from libspn, a learning and infernce library with Sum-product Networks, 3 
+          projects that are clone from keras, antoher popular machine learning library built on tensorflow.
+          <table class="table">
+            <caption class="text-center">clone projects</caption>
+             <tbody>
+                <tr>
+                   <td>cloned from</td>
+                   <td>tensorflow</td>
+                   <td>edward</td>
+                   <td>keras</td>
+                   <td>libspn</td>
+                   <td>sum</td>
+                </tr>
+                <tr>
+                   <td>number</td>
+                   <td>136</td>
+                   <td>4</td>
+                   <td>3</td>
+                   <td>2</td>
+                   <td>145</td>
+                </tr>
+             </tbody>
+          </table>
+
+          Besides, there are 42 blog back up projects that contain the same tensorflow files. In addition, there are also some project that slightly modify 
+          other projects. In detail, there are 43 projects that customize tensorflow to make it run on android, ios and other platforms, 5 projects that slightly 
+          modify google's seq2seq, a powerful NLP model.
+          <table class="table">
+            <caption class="text-center">customize projects</caption>
+             <tbody>
+                <tr>
+                   <td>original project</td>
+                   <td>blog files</td>
+                   <td>tensorflow</td>
+                   <td>seq2seq</td>
+                   <td>sum</td>
+                </tr>
+                <tr>
+                   <td>number</td>
+                   <td>42</td>
+                   <td>43</td>
+                   <td>5</td>
+                   <td>90</td>
+                </tr>
+             </tbody>
+          </table>
+          After excluding cloned and customize projects, there are 96 self-developed projects remained. We set 10 categories, they are: 
+          Computer Vision (CV), Natural Language Processing (NLP), Reinforcement Learning (RL), BIOINFORMATICS (BIO), DATASET, DATA ANALYSIS (DA), COURSE, 
+          TUTORIAL, RESEARCH (RES) and OTHER. CV & NLP are areas deep learning techniques are widely applied in. RL is a field that is juxtaposed with deep
+          learning and gains more and more attention in recent years. It includes game AI, self-driving and so on. BIO including medical and health applications, is another area 
+          that AI techniques can be used. Dataset are repositories containing public datasets and scripts for using them. DA are repositories about structural
+          data analysis. Here, image, video and text are unstructural data. Structural data analysis including movie recommendation and so on. Course are repositories 
+          about popular public courses such as cs224n and udacity. Tutorial are repositories about learning AI techniques, including code examples, docs and so on.
+          RES are repositories about paper recurring. Other are repositories that can not be classified into the above, such as libraries.
+          <table class="table">
+            <caption class="text-center">self-developed projects</caption>
+             <tbody>
+                <tr>
+                   <td>category</td>
+                   <td>CV</td>
+                   <td>NLP</td>
+                   <td>RL</td>
+                   <td>BIO</td>
+                   <td>DATASET</td>
+                   <td>DA</td>
+                   <td>COURSE</td>
+                   <td>TUTORIAL</td>
+                   <td>RES</td>
+                   <td>OTHER</td>
+                   <td>sum</td>
+                </tr>
+                <tr>
+                   <td>number</td>
+                   <td>24</td>
+                   <td>14</td>
+                   <td>12</td>
+                   <td>5</td>
+                   <td>1</td>
+                   <td>2</td>
+                   <td>6</td>
+                   <td>16</td>
+                   <td>8</td>
+                   <td>8</td>
+                   <td>96</td>
+                </tr>
+             </tbody>
+          </table>
+          <br />
+          <img class="img-responsive center-block" src="img/self-developed_projects.png" width="80%"/>
+          <br />
+          <br />
+          Result analysis: Through our manually checked result, we can see:
+          <ul>
+            <li style="text-align: left">There are still many cloned projects after excluding thoses labelled forked projects.</li>
+            <li style="text-align: left">Some projects contain the same tensorflow files, such as those 42 blog back up projects.</li>
+            <li style="text-align: left">CV, NLP, RL and tutorial projects dominate self-developed projects. So many tutorial projects
+            indicate that AI is very popular.</li>
+          </ul>
+          <p class="lead text-muted" style="font-size: 19px; text-align: left; margin-top:20px">
+          Next plan:
+          <ul>
+            <li style="text-align: left">Finding out all AI projects based on popular AI frameworks.</li>
+            <li style="text-align: left">Manually checking gives us an insight that there are many forked, cloned and slight customized
+            projects which should be excluded. We can identify cloned projects by judging whether they share a same commit. But for small
+            customize projects, we now think of judging whether they share most of their blobs. </li>
+            <li style="text-align: left">Developing automatic methods (keywords match or unsupervised methods such as LDA, KMeans) to 
+            classify such a huge amount of projects into reasonable categories. </li>
+          </ul>
+          </p>
+          </p>
+          <p class="lead text-muted" style="font-size: 21px; text-align: left; font-weight:bold; margin-top:50px>Datasets and scripts"> Datasets and scripts</p>
+          <p class="lead text-muted" style="font-size: 19px; text-align: left; margin-top:5px"> Data source: World of Code</p>
+          <p class="lead text-muted" style="font-size: 19px; text-align: left; margin-top:5px"> Data type: git objects </p>
+          
+          <p class="lead text-muted" style="font-size: 19px; text-align: left; margin-top:5px"> More details:
+          <a href="https://bitbucket.org/swsc/overview/src/master/">full description</a> </p>
+          <p class="lead text-muted" style="font-size: 16px; margin-top:50px">Papers: </p>
+          <p class="lead text-muted" style="font-size: 16px; font-style:italic; text-align: left">
+          Ma Y, Bogart C, Amreen S, et al. World of code: an infrastructure for mining the universe of open source VCS data. 
+          Proceedings of the 16th International Conference on Mining Software Repositories. IEEE Press, 2019: 143-154.
+          </p>
+          
+        </div>
+      </section>
+<script src='js/footer.js'></script>
