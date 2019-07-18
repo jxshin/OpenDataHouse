@@ -26,7 +26,10 @@ document.writeln('<a class="mr-2 text-white nav-link" href="index.html"><h5><str
 document.writeln('<div class="collapse navbar-collapse" id="navbars">');
 document.writeln('<ul class="navbar-nav mr-auto">');
 document.writeln('<li class="nav-item">');
-document.writeln('<a class="nav-link" href="#" onclick="contact()">Contact</a>');
+document.writeln('<a class="nav-link" href="index.html">中文</a>');
+document.writeln('</li>');
+document.writeln('<li class="nav-item">');
+document.writeln('<a class="nav-link" href="index_en.html">English</a>');
 document.writeln('</li>');
 document.writeln('</ul>');
 document.writeln('<ul class="navbar-nav ">');

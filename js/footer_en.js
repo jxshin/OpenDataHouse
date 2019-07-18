@@ -8,7 +8,7 @@ Written by:
 document.writeln('<footer class="text-muted">');
 document.writeln('<div class="container">');
 //document.writeln('<p class="float-right">');
-document.writeln(' <p class="text-center">OpenDataHouse &copy; 北京大学、中国科学院软件研究所实证软件工程研究组 (ver 0.1)</p></footer>');
+document.writeln(' <p class="text-center">OpenDataHouse &copy; powered by empirical software engineering team from Peking Uninversity and ISCAS. (ver 0.1)</p></footer>');
 document.writeln('<script src="js/jquery-slim.min.js"></script>');
 document.writeln('<script src="js/jquery-3.3.1.min.js"></script>');
 document.writeln('<script src="js/popper.min.js"></script>');
